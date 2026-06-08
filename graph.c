@@ -17,7 +17,7 @@ Vector2 plot(Vector2 p) // plots cartesain co-ordiantes to screen
 	};
 }
 
-Vector2 rotP(Vector2 p,float angle)
+Vector2 rotatePoint(Vector2 p,float angle)
 {
 	return (Vector2)
 	{
@@ -28,24 +28,35 @@ Vector2 rotP(Vector2 p,float angle)
 
 void drawPlane(void);
 
+void drawLine(Vector2 p, Vector2 q,float t)
+{
+	float dx = (q.x- p.x);
+	float dy = (q.y-p.y);
+	Vector2 pline = {
+		p.x + t*dx,
+		p.y + t*dy
+	};
+	Vector2 nline = {
+		p.x - t*dx,
+		p.y - t*dy
+	};
+	DrawLineEx(plot(nline),plot(pline),5.0f,RED);
+}
 
-int main()
+int main(void)
 {
 	InitWindow(width,height,"plane");
 	SetTargetFPS(60);
 	float angle = 0.0f;
+	Vector2 p;
+
 	while(!WindowShouldClose())
 	{
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 		drawPlane();
 		// draw stuff on the plane
-		DrawCircleV(plot((Vector2){3.0f,2.0f}),18.0f,RED);
-		DrawCircleV(plot((Vector2){-3.0f,4.0f}),15.0f,RED);
-		DrawCircleV(plot((Vector2){-5.0f,-5.0f}),10.0f,GREEN);
-	
-		angle += 0.01f;
-		
+		drawLine((Vector2){-0.5,0.0f},(Vector2){0.0f,1.0f},20);	
 		EndDrawing();
 	}
 	CloseWindow();
@@ -70,14 +81,14 @@ void drawPlane(void){
 		// number the horizonatal axis.
 		for(int i = 1; i <= winwidth; i++)
 		{
-			DrawText(TextFormat("%d",i), stepH + i*s-5, stepV+s/2-15, 30, BLACK);	
-			DrawText(TextFormat("%d",-i), stepH - i*s-5, stepV+s/2-15, 30, BLACK);
+			DrawText(TextFormat("%d",i), stepH + i*s-5, stepV+s/2-15, 20, BLACK);	
+			DrawText(TextFormat("%d",-i), stepH - i*s-5, stepV+s/2-15, 20, BLACK);
 		}
 		// number the vertical axis
 		for(int i = 1; i <= winheight; i++)
 		{
-			DrawText(TextFormat("%d",i), stepH-s/2-10, stepV - i*s-12, 30, BLACK);	
-			DrawText(TextFormat("%d",-i), stepH-s/2-20, stepV + i*s-12, 30, BLACK);	
+			DrawText(TextFormat("%d",i), stepH-s/2-10, stepV - i*s-12, 20, BLACK);	
+			DrawText(TextFormat("%d",-i), stepH-s/2-20, stepV + i*s-12, 20, BLACK);	
 		}
 		// draw the x and y axis
 		DrawRectangle(0, height/2-2,width, 4, BLACK);
