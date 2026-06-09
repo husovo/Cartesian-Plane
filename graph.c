@@ -5,13 +5,13 @@
 #define width 1800
 #define height 1400
 
-const Vector2 origin = {width/2.0f, height/2.0f};
-const int s = 50; // lenght on 1 unit in pixels
-
 typedef struct line{
 	Vector2 P;
 	Vector2 Q;
-}line; 
+}line;
+
+const Vector2 origin = {width/2.0f, height/2.0f};
+const int s = 50; // lenght on 1 unit in pixels
 
 Vector2 plot(Vector2 p) // plots cartesain co-ordiantes to screen
 {	// O+P = P	
@@ -32,9 +32,19 @@ Vector2 rotatePoint(Vector2 p,float angle)
 }
 
 void drawPlane(void);
-
-void drawLine(Vector2 p, Vector2 q,float t)
+Vector2 lineDirection(line l1){
+	
+	Vector2 p={l1.P.x,l1.P.y};
+	Vector2 q={l1.Q.x,l1.Q.y};
+    // direction of the line
+	float dx = (q.x - p.x);
+	float dy = (q.y - p.y);
+	return (Vector2){dx,dy};	
+}
+void drawLine(line l1,float t)
 {
+	Vector2 p={l1.P.x,l1.P.y};
+	Vector2 q={l1.Q.x,l1.Q.y};
     // direction of the line
 	float dx = (q.x - p.x);
 	float dy = (q.y - p.y);
@@ -66,21 +76,39 @@ void drawLine(Vector2 p, Vector2 q,float t)
 	
 }
 
+Vector2 pointOfIntersection(line l1, line l2){
+	Vector2 A = lineDirection(l1);
+	Vector2 Ap= lineDirection(l2);
+	float s,t, d = (A.y*Ap.x - A.x*Ap.y);
+	
+	if(d != 0){
+		s =(A.x * (l2.P.y-l1.P.y) - A.y * (l2.P.x-l1.P.x))/d;
+		t = (Ap.x * (l2.P.y-l1.P.y) - Ap.y * (l2.P.x-l1.P.x))/d;
+	}
+	// the point of intersection is the same for both lines.
+	// return the x from l1 and y from l2.
+	return (Vector2){l1.P.x + t*A.x,l2.P.y+s*Ap.y};
+}
 int main(void)
 {
 	InitWindow(width,height,"plane");
 	SetTargetFPS(60);
-	float angle = 0.0f;	
-	
+	float angle = 0.0f;
+	Vector2 p = {1.0f,2.0f};
+	Vector2 q= {-3.0f,4.0f};
+	Vector2 m = {3.0f,-2.0f};
+	Vector2 n= {-4.0f,-1.0f};
+	line L1 = {p,q};
+	line L2 = {m,n};
 	while(!WindowShouldClose())
 	{
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 		drawPlane();
 		// draw stuff on the plane
-		drawLine((Vector2){-0.5,0.0f},(Vector2){0.0f,1.0f},10);	
-		drawLine((Vector2){-1.5,2.0f},(Vector2){2.0f,3.0f},10);
-		drawLine((Vector2){-5.5,1.0f},(Vector2){3.0f,5.0f},10);
+		drawLine(L1,10);	
+		drawLine(L2,10);
+		DrawCircleV(plot(pointOfIntersection(L1,L2)),5,BLUE);
 		EndDrawing();
 	}
 	CloseWindow();
