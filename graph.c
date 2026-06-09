@@ -32,6 +32,7 @@ Vector2 rotatePoint(Vector2 p,float angle)
 }
 
 void drawPlane(void);
+
 Vector2 lineDirection(line l1){
 	
 	Vector2 p={l1.P.x,l1.P.y};
@@ -79,23 +80,25 @@ void drawLine(line l1,float t)
 Vector2 pointOfIntersection(line l1, line l2){
 	Vector2 A = lineDirection(l1);
 	Vector2 Ap= lineDirection(l2);
-	float s,t, d = (A.y*Ap.x - A.x*Ap.y);
+	float c=0,t=0, d = (A.y*Ap.x - A.x*Ap.y);
 	
 	if(d != 0){
-		s =(A.x * (l2.P.y-l1.P.y) - A.y * (l2.P.x-l1.P.x))/d;
+		c =(A.x * (l2.P.y-l1.P.y) - A.y * (l2.P.x-l1.P.x))/d;
 		t = (Ap.x * (l2.P.y-l1.P.y) - Ap.y * (l2.P.x-l1.P.x))/d;
+	}else{
+		return (Vector2){0.0f,0.0f};
 	}
-	// the point of intersection is the same for both lines.
-	// return the x from l1 and y from l2.
-	return (Vector2){l1.P.x + t*A.x,l2.P.y+s*Ap.y};
+	// the point of intersection is the same.
+	return (Vector2){l1.P.x + t*A.x,l1.P.y+t*A.y};
 }
 int main(void)
 {
 	InitWindow(width,height,"plane");
 	SetTargetFPS(60);
 	float angle = 0.0f;
-	Vector2 p = {1.0f,2.0f};
+	Vector2 p = {-1.0f,2.0f};
 	Vector2 q= {-3.0f,4.0f};
+
 	Vector2 m = {3.0f,-2.0f};
 	Vector2 n= {-4.0f,-1.0f};
 	line L1 = {p,q};
@@ -108,7 +111,7 @@ int main(void)
 		// draw stuff on the plane
 		drawLine(L1,10);	
 		drawLine(L2,10);
-		DrawCircleV(plot(pointOfIntersection(L1,L2)),5,BLUE);
+		DrawCircleV(plot(pointOfIntersection(L1,L2)),6,BLUE);
 		EndDrawing();
 	}
 	CloseWindow();
@@ -120,7 +123,6 @@ void drawPlane(void){
 	int stepV = origin.y;
 	int winwidth = (width/2)/s;
 	int winheight = (height/2)/s;
-
 
 		// draw the cartesian plane
 		for(int x = 0; x <= width; x += s){
