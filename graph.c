@@ -80,10 +80,10 @@ void drawLine(line l1,float t)
 Vector2 pointOfIntersection(line l1, line l2){
 	Vector2 A = lineDirection(l1);
 	Vector2 Ap= lineDirection(l2);
-	float c=0,t=0, d = (A.y*Ap.x - A.x*Ap.y);
+	float t, d = (A.y*Ap.x - A.x*Ap.y);
 	
 	if(d != 0){
-		c =(A.x * (l2.P.y-l1.P.y) - A.y * (l2.P.x-l1.P.x))/d;
+		//c =(A.x * (l2.P.y-l1.P.y) - A.y * (l2.P.x-l1.P.x))/d;
 		t = (Ap.x * (l2.P.y-l1.P.y) - Ap.y * (l2.P.x-l1.P.x))/d;
 	}else{
 		return (Vector2){0.0f,0.0f};
