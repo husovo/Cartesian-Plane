@@ -95,14 +95,13 @@ int main(void)
 {
 	InitWindow(width,height,"plane");
 	SetTargetFPS(60);
+	
+	Font my_font = LoadFont("NewCMMath-Regular.otf");
+	
 	float angle = 0.0f;
-	Vector2 p = {-1.0f,2.0f};
-	Vector2 q= {-3.0f,4.0f};
-
-	Vector2 m = {3.0f,-2.0f};
-	Vector2 n= {-4.0f,-1.0f};
-	line L1 = {p,q};
-	line L2 = {m,n};
+line L1 = {{1.0f,5.0f},{-4.0f,-2.0f}};
+line L2 = {{7.0f,-8.0f},{1.0f,0.0f}};
+Vector2 x = pointOfIntersection(L1,L2);
 	while(!WindowShouldClose())
 	{
 		BeginDrawing();
@@ -111,7 +110,10 @@ int main(void)
 		// draw stuff on the plane
 		drawLine(L1,10);	
 		drawLine(L2,10);
-		DrawCircleV(plot(pointOfIntersection(L1,L2)),6,BLUE);
+		Vector2 intpos = plot(x);	
+		DrawCircleV(intpos,6,BLUE);
+		DrawTextEx(my_font,TextFormat("(%.2f,%.2f)",x.x,x.y),(Vector2){intpos.x,intpos.y -50}, 50,1, BLACK);
+
 		EndDrawing();
 	}
 	CloseWindow();
