@@ -1,5 +1,8 @@
 #include <raylib.h>
 #include <math.h>
+#include"raymath.h"
+#include"rlgl.h"
+
 // -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 // type: "make graph" to compile
 #define width 1400
@@ -72,6 +75,7 @@ void drawLine(line l1, float t)
 	}
 }
 
+
 Vector2 pointOfIntersection(line l1, line l2)
 {
 	Vector2 A = lineDirection(l1);
@@ -106,11 +110,19 @@ int main(void)
 	float zoom_factor = 3;
 	while (!WindowShouldClose())
 	{
-		if (camera.zoom > 3.0f) camera.zoom = 3.0f;
-        else if (camera.zoom < 0.1f) camera.zoom = 0.1f;
-
+		if (camera.zoom > 3.0f) 
+			camera.zoom = 3.0f;
+        else if (camera.zoom < 0.1f) 
+			camera.zoom = 0.1f;
 		
-		if(IsKeyPressed(KEY_B))
+		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+        {
+            Vector2 delta = GetMouseDelta();
+            delta = Vector2Scale(delta, -1.0f/camera.zoom);
+            camera.target = Vector2Add(camera.target, delta);
+        }
+		
+		if(IsKeyPressed(KEY_B)|| IsKeyPressedRepeat(KEY_B))
 			camera.zoom+=0.05;
 		
 		BeginDrawing();
@@ -119,12 +131,13 @@ int main(void)
 		
 		drawPlane(zoom_factor);
 		// draw stuff on the plane
-		if(IsKeyPressed(KEY_A)){
+		if(IsKeyPressed(KEY_A) || IsKeyPressedRepeat(KEY_A)){
 			camera.zoom-=0.05;
 			zoom_factor +=0.5;
 		};
-		drawLine(L1, 10);
-		drawLine(L2, 10);
+
+		drawLine(L1, 25);
+		drawLine(L2, 25);
 		DrawCircleV(plot(x), 6.0f, BLUE);
 		//DrawLine(-4*width/2,0,2*width,height/2,RED);
 		EndMode2D();
