@@ -103,10 +103,11 @@ int main(void)
 	camera.offset= origin;
 	camera.zoom=1.0;
 
-	// float angle = 0.0f;
-	line L1 = {{1.0f, -1.0f}, {-2.0f, 0.0f}};
-	line L2 = {{3.0f, 1.0f}, {-2.0f, 4.0f}};
+	//float angle = 0.0f;
+	line L1 = {{1.0f, -1.0f}, {3.0f, 5.0f}};
+	line L2 = {{2.0f, 1.0f}, {4.0f, -1.0f}};
 	Vector2 x = pointOfIntersection(L1, L2);
+	Vector2 pos = plot(x);
 	float zoom_factor = 3;
 	while (!WindowShouldClose())
 	{
@@ -138,9 +139,9 @@ int main(void)
 
 		drawLine(L1, 25);
 		drawLine(L2, 25);
-		DrawCircleV(plot(x), 6.0f, BLUE);
+		DrawCircleV(pos, 6.0f, GREEN);
 		drawCircle((Vector2){3.0f,2.0f},3.0f);
-		//DrawLine(-4*width/2,0,2*width,height/2,RED);
+		DrawText(TextFormat("(%.2f,%.2f)",x.x,x.y),pos.x+s/2,pos.y-s/2,40,BLACK);	
 		EndMode2D();
 		EndDrawing();
 	}
@@ -204,3 +205,12 @@ void drawPlane(float zoom_factor)
 	DrawRectangle(width/2-2,-height,4,zoom_factor*width,BLACK);
 	
 }
+
+//	line lineCircleIntersection(line l,float r)
+//	{
+//		const int t = 20;
+//		Vector2 dir = lineDirection(l);
+//		float x = l.P.x + t*dir.x;
+//		float y = l.P.y + t*dir.y;
+//	}
+
