@@ -32,7 +32,7 @@ Vector2 rotatePoint(Vector2 p, float angle)
 }
 
 void drawPlane(float);
-
+void drawCircle(Vector2 centre, float r);
 Vector2 lineDirection(line l1)
 {
 
@@ -139,12 +139,32 @@ int main(void)
 		drawLine(L1, 25);
 		drawLine(L2, 25);
 		DrawCircleV(plot(x), 6.0f, BLUE);
+		drawCircle((Vector2){3.0f,2.0f},3.0f);
 		//DrawLine(-4*width/2,0,2*width,height/2,RED);
 		EndMode2D();
 		EndDrawing();
 	}
 	CloseWindow();
 	return 0;
+}
+// draws a circel, not filled. 
+void drawCircle(Vector2 centre, float r)
+{	
+	float angle = PI/24.0f;
+	Vector2 prev={
+		centre.x + r*cosf(0.0f),
+		centre.y + r*sinf(0.0f)
+	};
+	
+	for(float theta = angle; theta <= 2*PI+angle; theta+= angle)
+	{
+		Vector2 p={
+			centre.x + r*cosf(theta),
+			centre.y+r*sinf(theta)
+		};
+		DrawLineEx(plot(prev),plot(p),4,PURPLE);
+		prev = p;
+	}
 }
 
 void drawPlane(float zoom_factor)
@@ -160,7 +180,7 @@ void drawPlane(float zoom_factor)
 		DrawLine(x, 0, x, zoom_factor*height, BLACK);
 		DrawLine(x, 0, x, -zoom_factor*height, BLACK);
 	}
-	for (int y = -zoom_factor*height; y <= zoom_factor*height; y += s)
+	for (int y= -zoom_factor*height; y <= zoom_factor*height; y += s)
 	{
 		DrawLine(0, y, zoom_factor*width, y, BLACK);
 		DrawLine(0, y, -zoom_factor*width, y, BLACK);
